@@ -44,10 +44,10 @@ public class ApiController {
                         .transcode();*/
 
     @RequestMapping("/pdf")
-    public PDF greeting2(@RequestParam(value="name", defaultValue="8") String name) {
+    public PDF greeting2(@RequestParam(value="name", defaultValue="b") String name) {
 
         try {
-            new SVGExport().setInput(new FileInputStream(name + "-uploaded.svg"))
+            new SVGExport().setInput(new FileInputStream(name + ".svg"))
                     .setOutput(new FileOutputStream(name + ".pdf"))
                     .setTranscoder(Format.PDF)
                     .transcode();
