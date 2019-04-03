@@ -1,8 +1,24 @@
 package ru.devlegal;
 
-import org.apache.batik.transcoder.TranscoderException;
+/**
+ *
+ * @author Ben Ripkens <bripkens.dev@gmail.com>
+ */
+public class SVGExportException extends RuntimeException {
 
-public class SVGExportException extends Throwable {
-    public SVGExportException(TranscoderException ex) {
+    public SVGExportException(Throwable cause) {
+        super(cause);
     }
+
+    public SVGExportException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public SVGExportException(String message) {
+        super(message);
+    }
+
+    public SVGExportException() {
+    }
+
 }
