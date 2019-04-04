@@ -12,8 +12,8 @@ public class Go {
         SVGExport D = C.setTranscoder(Format.PDF);
         D.transcode().transcode();*/
 
-        new SVGExport().setInput(new FileInputStream("b.svg"))
-                .setOutput(new FileOutputStream("test12.pdf"))
+        new SVGExport().setInput(new FileInputStream("7-uploaded.svg"))
+                .setOutput(new FileOutputStream("test33.pdf"))
                 .setTranscoder(Format.PDF)
                 .transcode();
     }

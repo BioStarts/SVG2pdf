@@ -4,11 +4,17 @@ package ru.devlegal;
 import de.bripkens.svgexport.Format;
 import de.bripkens.svgexport.SVGExport;
 import org.apache.fop.pdf.PDFLink;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.devlegal.Greeting;
 
 import java.io.*;
+import java.net.MalformedURLException;
 import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
@@ -44,7 +50,7 @@ public class ApiController {
                         .transcode();*/
 
     @RequestMapping("/pdf")
-    public PDF greeting2(@RequestParam(value="name", defaultValue="b") String name) {
+    public ResponseEntity greeting2(@RequestParam(value="name", defaultValue="7") String name) throws IOException {
 
         try {
             new SVGExport().setInput(new FileInputStream(name + ".svg"))
@@ -55,10 +61,37 @@ public class ApiController {
             e.printStackTrace();
         }
 
-        return new PDF(new File(name + ".pdf"));
+        //Resource file = new UrlResource(name + ".pdf");
+
+        ResponseEntity respEntity = null;
+
+        byte[] reportBytes = null;
+        File result = new File(name + ".pdf");
+
+        if(result.exists()){
+            InputStream inputStream = new FileInputStream(name + ".pdf");
+            String type=result.toURL().openConnection().guessContentTypeFromName(name + ".pdf");
+
+            byte[]out=org.apache.commons.io.IOUtils.toByteArray(inputStream);
+
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("content-disposition", "attachment; filename=" + name + ".pdf");
+            responseHeaders.add("Content-Type",type);
+
+            respEntity = new ResponseEntity(out, responseHeaders, HttpStatus.OK);
+        }else{
+            respEntity = new ResponseEntity ("File Not Found", HttpStatus.OK);
+        }
+        return respEntity;
+
+
+        //return ResponseEntity.ok().body(file);
+        //return new PDF(new File(name + ".pdf"));
         /*return new Greeting(counter.incrementAndGet(),
                 String.format(template, name));*/
     }
+
+
 
 
 
