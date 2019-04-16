@@ -4,6 +4,8 @@ package ru.devlegal;
 import de.bripkens.svgexport.Format;
 import de.bripkens.svgexport.SVGExport;
 import org.apache.fop.pdf.PDFLink;
+import org.apache.pdfbox.io.MemoryUsageSetting;
+import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -100,5 +102,18 @@ public class ApiController {
 
         return new Greeting(counter.incrementAndGet(),
                 String.format(template, name));
+    }
+
+
+    @RequestMapping(value="/merge", method= RequestMethod.POST)
+    public @ResponseBody
+    String Merge(@RequestParam("name") String[] name) throws IOException {
+        PDFMergerUtility ut = new PDFMergerUtility();
+        for (int i = 0; i < name.length; i++) {
+            ut.addSource(name[i]);
+        }
+        ut.setDestinationFileName("C:\\Users\\User\\Geek\\Svgtopdf\\as2.pdf");
+        ut.mergeDocuments(MemoryUsageSetting.setupMainMemoryOnly());
+        return "лол чекни шо там";
     }
 }
