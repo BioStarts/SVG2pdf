@@ -1,26 +1,19 @@
 package ru.devlegal;
 
-
 import de.bripkens.svgexport.Format;
 import de.bripkens.svgexport.SVGExport;
-import org.apache.fop.pdf.PDFLink;
 import org.apache.pdfbox.io.MemoryUsageSetting;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.devlegal.Greeting;
-
 import java.io.*;
-import java.net.MalformedURLException;
 import java.util.concurrent.atomic.AtomicLong;
 
-@RestController
 
+@RestController
 public class ApiController {
 
     private static final String template = "Hello, %s!";
@@ -107,13 +100,16 @@ public class ApiController {
 
     @RequestMapping(value="/merge", method= RequestMethod.POST)
     public @ResponseBody
-    String Merge(@RequestParam("name") String[] name) throws IOException {
+    String Merge(@RequestParam("name") String[] name,
+                 @RequestParam(value = "new")String newPdf) throws IOException {
+        //model.addAttribute("name",name);
         PDFMergerUtility ut = new PDFMergerUtility();
         for (int i = 0; i < name.length; i++) {
-            ut.addSource(name[i]);
+            ut.addSource("C:\\Users\\vstartsev\\IdeaProjects\\svg\\" + name[i]);
         }
-        ut.setDestinationFileName("C:\\Users\\User\\Geek\\Svgtopdf\\as2.pdf");
+        ut.setDestinationFileName("C:\\Users\\vstartsev\\IdeaProjects\\svg\\" + newPdf);
         ut.mergeDocuments(MemoryUsageSetting.setupMainMemoryOnly());
-        return "лол чекни шо там";
+        return String.valueOf(name.length);
+
     }
 }
